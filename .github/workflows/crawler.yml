@@ -24,14 +24,34 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      # --- 测试第一个飞书群 ---
+      - name: Test first Feishu webhook
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"msg_type":"text","content":{"text":"[trendradar-feishu] 第一群 webhook 连通测试 ✅"}}' \
+            ${{ secrets.FEISHU_WEBHOOK_URL }}
+
+      # --- 测试第二个飞书群 ---
+      - name: Test second Feishu webhook
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"msg_type":"text","content":{"text":"[trendradar-feishu] 第二群 webhook 连通测试 ✅"}}' \
+            ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
+
+      # --- 真正跑 TrendRadar，推送到第一个群 ---
       - name: Run TrendRadar to first Feishu group
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
           python main.py
 
+      # --- 再跑一遍 TrendRadar，推送到第二个群 ---
       - name: Run TrendRadar to second Feishu group
         env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
+        run: |
+          python main.py
+
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
         run: |
           python main.py
