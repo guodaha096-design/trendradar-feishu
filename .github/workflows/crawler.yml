@@ -24,7 +24,7 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-           - name: Run TrendRadar to first Feishu group
+      - name: Run TrendRadar to first Feishu group
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
@@ -35,4 +35,3 @@ jobs:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
         run: |
           python main.py
-
