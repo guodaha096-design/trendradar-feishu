@@ -24,9 +24,15 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run TrendRadar
+           - name: Run TrendRadar to first Feishu group
         env:
-          # 这里用的就是你在 Secrets 里配好的 FEISHU_WEBHOOK_URL
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
           python main.py
+
+      - name: Run TrendRadar to second Feishu group
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
+        run: |
+          python main.py
+
