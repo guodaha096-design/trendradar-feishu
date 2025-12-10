@@ -4,7 +4,7 @@ on:
   # 定时任务：每 2 小时跑一次（可以后面再调）
   schedule:
     - cron: '0 */2 * * *'
-  # 支持手动手动点击执行
+  # 支持手动点击运行
   workflow_dispatch:
 
 jobs:
@@ -27,28 +27,14 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      # 4. 给第一个飞书群发一条测试消息
-      - name: Test first Feishu webhook
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-            -d '{"msg_type":"text","content":{"text":"[trendradar-feishu] 第一群 webhook 连通测试 ✅"}}' \
-            ${{ secrets.FEISHU_WEBHOOK_URL }}
-
-      # 5. 给第二个飞书群发一条测试消息
-      - name: Test second Feishu webhook
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-            -d '{"msg_type":"text","content":{"text":"[trendradar-feishu] 第二群 webhook 连通测试 ✅"}}' \
-            ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
-
-      # 6. 跑 TrendRadar，把结果发到第一个群
+      # 4. 跑 TrendRadar，推送到第一个飞书群
       - name: Run TrendRadar to first Feishu group
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
           python main.py
 
-      # 7. 再跑一次 TrendRadar，把结果发到第二个群
+      # 5. 再跑一次 TrendRadar，推送到第二个飞书群
       - name: Run TrendRadar to second Feishu group
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL_2 }}
